@@ -1,3 +1,6 @@
+from math import gcd
+
+
 def modular_exponentiation(base, exponent, modulus):
     """
     Modular exponentiation is a type of exponentiation performed over a modulus.
@@ -23,9 +26,7 @@ def jacobi(n, m):
     :return: a Jacobi Symbol answer.
     :rtype: integer
     """
-    import math
-
-    if math.gcd(n, m) != 1:
+    if gcd(n, m) != 1:
         return 0
     if m <= 0 or m % 2 == 0:
         return 0
@@ -64,3 +65,19 @@ def solovay_strassen(mprime, accuracy):
         if jac == 0 or mod_exp != jac:
             return False
     return True
+
+
+def egcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, y, x = egcd(b % a, a)
+        return g, x - (b // a) * y, y
+
+
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
