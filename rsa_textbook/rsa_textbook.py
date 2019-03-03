@@ -1,4 +1,17 @@
-from utilites import modinv
+def egcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, y, x = egcd(b % a, a)
+        return g, x - (b // a) * y, y
+
+
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
 
 
 def calc_priv_key(e, n):
@@ -31,13 +44,13 @@ def main():
     d = int('74D806F9F3A62BAE331FFE3F0A68AFE35B3D2E4794148AACBC26AA381CD7D30D', 16)
     dec = decrypt(enc, d, n)
     print('c=', '{:x}'.format(enc))
-    print('Is M = c:', dec == M)
+    print('Message after dec:', bytes.fromhex('{:x}'.format(dec)).decode('utf-8'))
+    print('Is M = c:', bytes.fromhex('{:x}'.format(dec)).decode('utf-8') == 'A top secret!')
 
     # Task 3.3
     print(20 * '-', 'Task 3.3', 20 * '-')
     c = int('8C0F971DF2F3672B28811407E2DABBE1DA0FEBBBDFC7DCB67396567EA1E2493F', 16)
     dec = decrypt(c, d, n)
-    print(dec)
     print('Message=', '{:x}'.format(dec))
     print('Is dec = A top secret!', bytes.fromhex('{:x}'.format(dec)).decode('utf-8'))
 

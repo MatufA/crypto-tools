@@ -1,23 +1,6 @@
 from math import gcd
 
 
-def modular_exponentiation(base, exponent, modulus):
-    """
-    Modular exponentiation is a type of exponentiation performed over a modulus.
-    :param base: a base of the exponentiation, e.g. base**exp.
-    :param exponent: an exponentiation, e.g. base**exp.
-    :param modulus: a modulus,e.g. mod.
-    :return: a remainder.
-    :rtype: integer.
-    """
-    if modulus == 1:
-        return 0
-    exp = 1
-    for _ in range(0, exponent):
-        exp = (exp * base) % modulus
-    return exp
-
-
 def jacobi(n, m):
     """
     Jacobi Symbol calculating.
@@ -60,24 +43,10 @@ def solovay_strassen(mprime, accuracy):
     for _ in range(0, accuracy):
         rand = random.randrange(2, mprime - 1)
         jac = jacobi(rand, mprime)
-        mod_exp = modular_exponentiation(rand, (mprime - 1) // 2, mprime)
+        mod_exp = pow(rand, (mprime - 1) // 2, mprime)
         mod_exp -= mprime if mod_exp > 1 else 0
         if jac == 0 or mod_exp != jac:
             return False
     return True
 
 
-def egcd(a, b):
-    if a == 0:
-        return b, 0, 1
-    else:
-        g, y, x = egcd(b % a, a)
-        return g, x - (b // a) * y, y
-
-
-def modinv(a, m):
-    g, x, y = egcd(a, m)
-    if g != 1:
-        raise Exception('modular inverse does not exist')
-    else:
-        return x % m
